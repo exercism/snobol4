@@ -1,0 +1,60 @@
+-include 'bq.sno'
+ define('get_working_directory()tmp')	:(get_working_directory.end)
+get_working_directory	tmp = bq("pwd")
+ tmp = reverse(tmp)
+ tmp ? break('/') . tmp
+ get_working_directory = reverse(tmp)	:(return)
+get_working_directory.end
+  define('script_sucker(script)codeblock,unit,line') :(script_sucker.end)
+script_sucker
+ codeblock = ''
+ unit = io_findunit()
+ input(.file, unit, , script) :f(script_sucker.fail)
+script_sucker.loop
+ line = file :f(script_sucker.done)
+ line pos(0) 'END' rpos(0) :s(script_sucker.loop)
+ codeblock = codeblock line ';' :(script_sucker.loop)
+script_sucker.done
+ endfile(file)
+ detach(.file)
+  script_sucker = codeblock :(return)
+script_sucker.fail
+ output = script ' not found' :(freturn)
+script_sucker.end 
+ test.count = 0
+ fail.count = 0
+ pass.count = 0
+ define('compare_and_report(testname,result,expected)lhs,rhs,bhs') :(compare_and_report.end)
+compare_and_report
+ test.count = test.count + 1
+ datatype(result) len(1) . lhs
+ datatype(expected) len(1) . rhs
+ bhs = 'compare_and_report.' lhs rhs
+ :($bhs)
+compare_and_report.is
+ eq(result, 0 + expected) :s(compare_and_report.pass)f(compare_and_report.fail)
+compare_and_report.si
+ eq(0 + result, expected) :s(compare_and_report.pass)f(compare_and_report.fail)
+compare_and_report.ii
+ eq(result, expected) :s(compare_and_report.pass)f(compare_and_report.fail)
+compare_and_report.ss
+ compare_and_report = ident(result, expected) :s(compare_and_report.pass)f(compare_and_report.fail)
+compare_and_report.pass
+ pass.count = pass.count + 1
+ compare_and_report = testname ' ... OK' :(return)
+compare_and_report.fail
+ fail.count = fail.count + 1
+ compare_and_report = testname ' ... FAIL' :(return)
+ 
+compare_and_report.end
+ corecode = script_sucker('./hello-world.sno') :f(end)
+* Say Hi!
+ codeblock = corecode ' :(test.1) ;'
+ compiled = code(codeblock)
+ :<compiled>
+test.1
+ expected = 'Hello, World!'
+ output = compare_and_report('Say Hi!',result, expected)
+tests_done
+ output = test.count " tests. " pass.count " passes, " fail.count " failure."
+END
