@@ -47,7 +47,7 @@ compare_and_report.fail
  compare_and_report = testname ' ... FAIL' :(return)
  
 compare_and_report.end
- corecode = script_sucker('./hello-world.sno') :f(end)
+ corecode = script_sucker('./hello_world.sno') :f(end)
 * Say Hi!
  codeblock = corecode ' :(test.1) ;'
  compiled = code(codeblock)
