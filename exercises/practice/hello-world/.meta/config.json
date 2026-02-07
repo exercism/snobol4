@@ -2,7 +2,7 @@
   "authors": [],
   "files": {
     "solution": [
-      "hello-world.sno"
+      "hello_world.sno"
     ],
     "test": [
       "test.sno"

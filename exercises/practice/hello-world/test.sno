@@ -5,7 +5,7 @@ get_working_directory	tmp = bq("pwd")
  tmp ? break('/') . tmp
  get_working_directory = reverse(tmp)	:(return)
 get_working_directory.end
-  define('script_sucker(script)codeblock,unit,line') :(script_sucker.end)
+ define('script_sucker(script)codeblock,unit,line') :(script_sucker.end)
 script_sucker
  codeblock = ''
  unit = io_findunit()
@@ -17,7 +17,7 @@ script_sucker.loop
 script_sucker.done
  endfile(file)
  detach(.file)
-  script_sucker = codeblock :(return)
+ script_sucker = codeblock :(return)
 script_sucker.fail
  output = script ' not found' :(freturn)
 script_sucker.end 

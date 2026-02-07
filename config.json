@@ -39,8 +39,15 @@
     ]
   },
   "tags": [
+    "paradigm/imperative",
+    "paradigm/declarative",
+    "typing/dynamic",
+    "typing/weak",
+    "execution_mode/interpreted",
+    "platform/windows",
     "platform/linux",
     "platform/mac",
-    "platform/windows"
+    "used_for/scripts",
+    "runtime/language_specific"
   ]
 }
