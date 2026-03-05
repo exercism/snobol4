@@ -1,0 +1,159 @@
+-include 'bq.sno'
+-include 'lib/inhale.sno'
+-include 'lib/whereami.sno'
+-include 'lib/cmprep.sno'
+-include 'lib/nextword.sno'
+-include 'lib/listtests.sno'
+ pass.count = 0
+ fail.count = 0
+ test.count = 0
+ corecode = inhale('./isogram.sno') :s(file.exists)
+ output = 'file ./isogram.sno not found' :(end)
+file.exists
+ codeblock = corecode '; :(test.after)'
+ compiled = code(codeblock)
+ testlist = host(0)
+ testlist pos(0) "-list" rpos(0) :f(test.numbers)
+ listtests()
+ :(end)
+test.numbers
+ ident(testlist) :f(test.loop)
+ testlist = '1 2 3 4 5 6 7 8 9 10 11 12 13 14'
+test.loop
+ testitem = nextword(testlist)
+ testno = testitem<1>
+ :($('test.' testno))
+test.after
+ output = cmprep(description, result, expected)
+ ident(testitem<2>) :s(tests.done)
+ testlist = testitem<2>
+ :(test.loop)
+test.1
+*#1. empty string
+ description = 'empty string'
+ expected = 1
+ property = 'isIsogram'
+ input.phrase = ''
+ :<compiled>
+ :(test.after)
+test.1.end
+test.2
+*#2. isogram with only lower case characters
+ description = 'isogram with only lower case characters'
+ expected = 1
+ property = 'isIsogram'
+ input.phrase = 'isogram'
+ :<compiled>
+ :(test.after)
+test.2.end
+test.3
+*#3. word with one duplicated character
+ description = 'word with one duplicated character'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'eleven'
+ :<compiled>
+ :(test.after)
+test.3.end
+test.4
+*#4. word with one duplicated character from the end of the alphabet
+ description = 'word with one duplicated character from the end of the alphabet'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'zzyzx'
+ :<compiled>
+ :(test.after)
+test.4.end
+test.5
+*#5. longest reported english isogram
+ description = 'longest reported english isogram'
+ expected = 1
+ property = 'isIsogram'
+ input.phrase = 'subdermatoglyphic'
+ :<compiled>
+ :(test.after)
+test.5.end
+test.6
+*#6. word with duplicated character in mixed case
+ description = 'word with duplicated character in mixed case'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'Alphabet'
+ :<compiled>
+ :(test.after)
+test.6.end
+test.7
+*#7. word with duplicated character in mixed case, lowercase first
+ description = 'word with duplicated character in mixed case, lowercase first'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'alphAbet'
+ :<compiled>
+ :(test.after)
+test.7.end
+test.8
+*#8. hypothetical isogrammic word with hyphen
+ description = 'hypothetical isogrammic word with hyphen'
+ expected = 1
+ property = 'isIsogram'
+ input.phrase = 'thumbscrew-japingly'
+ :<compiled>
+ :(test.after)
+test.8.end
+test.9
+*#9. hypothetical word with duplicated character following hyphen
+ description = 'hypothetical word with duplicated character following hyphen'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'thumbscrew-jappingly'
+ :<compiled>
+ :(test.after)
+test.9.end
+test.10
+*#10. isogram with duplicated hyphen
+ description = 'isogram with duplicated hyphen'
+ expected = 1
+ property = 'isIsogram'
+ input.phrase = 'six-year-old'
+ :<compiled>
+ :(test.after)
+test.10.end
+test.11
+*#11. made-up name that is an isogram
+ description = 'made-up name that is an isogram'
+ expected = 1
+ property = 'isIsogram'
+ input.phrase = 'Emily Jung Schwartzkopf'
+ :<compiled>
+ :(test.after)
+test.11.end
+test.12
+*#12. duplicated character in the middle
+ description = 'duplicated character in the middle'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'accentor'
+ :<compiled>
+ :(test.after)
+test.12.end
+test.13
+*#13. same first and last characters
+ description = 'same first and last characters'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'angola'
+ :<compiled>
+ :(test.after)
+test.13.end
+test.14
+*#14. word with duplicated character and with two hyphens
+ description = 'word with duplicated character and with two hyphens'
+ expected = 0
+ property = 'isIsogram'
+ input.phrase = 'up-to-date'
+ :<compiled>
+ :(test.after)
+test.14.end
+tests.done
+ output = test.count " tests. " pass.count " passes, " fail.count " failures."
+END

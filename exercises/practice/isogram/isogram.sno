@@ -1,0 +1,4 @@
+* Input from INPUT.PHRASE
+* Output to RESULT
+ RESULT = 0
+END
