@@ -1,0 +1,13 @@
+ define('nextword(text)result,first') :(e.nextword)
+nextword result = array("1:2")
+ text break(' ') . first span(' ') = :f(f.nextword)
+ result<1> = first
+ result<2> = text 
+* output = 'nextword: ' result<1> ',' result<2>
+ nextword = result :(return)
+f.nextword 
+ result<1> = text
+ result<2> = null
+* output = 'nextword: ' result<1> ',' result<2>
+ nextword = result :(return)
+e.nextword

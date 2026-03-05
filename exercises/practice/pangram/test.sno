@@ -1,0 +1,132 @@
+-include 'bq.sno'
+-include 'lib/inhale.sno'
+-include 'lib/whereami.sno'
+-include 'lib/cmprep.sno'
+-include 'lib/nextword.sno'
+-include 'lib/listtests.sno'
+ pass.count = 0
+ fail.count = 0
+ test.count = 0
+ corecode = inhale('./pangram.sno') :s(file.exists)
+ output = 'file ./pangram.sno not found' :(end)
+file.exists
+ codeblock = corecode '; :(test.after)'
+ compiled = code(codeblock)
+ testlist = host(0)
+ testlist pos(0) "-list" rpos(0) :f(test.numbers)
+ listtests()
+ :(end)
+test.numbers
+ ident(testlist) :f(test.loop)
+ testlist = '1 2 3 4 5 6 7 8 9 10 11'
+test.loop
+ testitem = nextword(testlist)
+ testno = testitem<1>
+ :($('test.' testno))
+test.after
+ output = cmprep(description, result, expected)
+ ident(testitem<2>) :s(tests.done)
+ testlist = testitem<2>
+ :(test.loop)
+test.1
+*#1. empty sentence
+ description = 'empty sentence'
+ expected = 0
+ property = 'isPangram'
+ input.sentence = ''
+ :<compiled>
+ :(test.after)
+test.1.end
+test.2
+*#2. perfect lower case
+ description = 'perfect lower case'
+ expected = 1
+ property = 'isPangram'
+ input.sentence = 'abcdefghijklmnopqrstuvwxyz'
+ :<compiled>
+ :(test.after)
+test.2.end
+test.3
+*#3. only lower case
+ description = 'only lower case'
+ expected = 1
+ property = 'isPangram'
+ input.sentence = 'the quick brown fox jumps over the lazy dog'
+ :<compiled>
+ :(test.after)
+test.3.end
+test.4
+*#4. missing the letter 'x'
+ description = 'missing the letter "x"'
+ expected = 0
+ property = 'isPangram'
+ input.sentence = 'a quick movement of the enemy will jeopardize five gunboats'
+ :<compiled>
+ :(test.after)
+test.4.end
+test.5
+*#5. missing the letter 'h'
+ description = 'missing the letter "h"'
+ expected = 0
+ property = 'isPangram'
+ input.sentence = 'five boxing wizards jump quickly at it'
+ :<compiled>
+ :(test.after)
+test.5.end
+test.6
+*#6. with underscores
+ description = 'with underscores'
+ expected = 1
+ property = 'isPangram'
+ input.sentence = 'the_quick_brown_fox_jumps_over_the_lazy_dog'
+ :<compiled>
+ :(test.after)
+test.6.end
+test.7
+*#7. with numbers
+ description = 'with numbers'
+ expected = 1
+ property = 'isPangram'
+ input.sentence = 'the 1 quick brown fox jumps over the 2 lazy dogs'
+ :<compiled>
+ :(test.after)
+test.7.end
+test.8
+*#8. missing letters replaced by numbers
+ description = 'missing letters replaced by numbers'
+ expected = 0
+ property = 'isPangram'
+ input.sentence = '7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog'
+ :<compiled>
+ :(test.after)
+test.8.end
+test.9
+*#9. mixed case and punctuation
+ description = 'mixed case and punctuation'
+ expected = 1
+ property = 'isPangram'
+ input.sentence = '"Five quacking Zephyrs jolt my wax bed."'
+ :<compiled>
+ :(test.after)
+test.9.end
+test.10
+*#10. case insensitive
+ description = 'case insensitive'
+ expected = 0
+ property = 'isPangram'
+ input.sentence = 'the quick brown fox jumps over with lazy FX'
+ :<compiled>
+ :(test.after)
+test.10.end
+test.11
+*#11. a-m and A-M are 26 different characters but not a pangram
+ description = 'a-m and A-M are 26 different characters but not a pangram'
+ expected = 0
+ property = 'isPangram'
+ input.sentence = 'abcdefghijklm ABCDEFGHIJKLM'
+ :<compiled>
+ :(test.after)
+test.11.end
+tests.done
+ output = test.count " tests. " pass.count " passes, " fail.count " failures."
+END
