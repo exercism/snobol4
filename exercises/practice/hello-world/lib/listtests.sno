@@ -1,0 +1,15 @@
+  define('listtests()file,unit,line') :(e.listtests)
+listtests 
+ output = 'Reading tests in ' host(2,1) '...'
+ unit = io_findunit()
+ input(.file, unit, , host(2,1)) :f(f.listtests)
+n.listtests
+ line = file :f(s.listtests)
+ line pos(0) '*#' any('0123456789') :f(n.listtests)
+ output = line :(n.listtests)
+s.listtests
+ endfile(file)
+ detach(.file) :(return)
+f.listtests
+ output = host(2,1) ' not found' :(freturn)
+e.listtests 

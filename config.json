@@ -24,6 +24,13 @@
     ],
     "example": [
       ".meta/example.sno"
+    ],
+    "invalidator": [
+      "lib/cmprep.sno",
+      "lib/inhale.sno",
+      "lib/listtests.sno",
+      "lib/nextword.sno",
+      "lib/whereami.sno"
     ]
   },
   "exercises": {
