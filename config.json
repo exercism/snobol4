@@ -42,19 +42,27 @@
         "practices": [],
         "prerequisites": [],
         "difficulty": 1
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "73733b75-eb05-4612-95ca-ca8881892e76",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
       }
     ]
   },
   "tags": [
-    "paradigm/imperative",
-    "paradigm/declarative",
-    "typing/dynamic",
-    "typing/weak",
     "execution_mode/interpreted",
-    "platform/windows",
+    "paradigm/declarative",
+    "paradigm/imperative",
     "platform/linux",
     "platform/mac",
-    "used_for/scripts",
-    "runtime/language_specific"
+    "platform/windows",
+    "runtime/language_specific",
+    "typing/dynamic",
+    "typing/weak",
+    "used_for/scripts"
   ]
 }
