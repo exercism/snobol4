@@ -4,7 +4,7 @@ inhale codeblock = ''
  input(.file, unit, , script) :f(f.inhale)
 l.inhale
  line = file :f(s.inhale)
-  line pos(0) 'END' rpos(0) :s(l.inhale)
+ line pos(0) 'END' rpos(0) :s(l.inhale)
  codeblock = codeblock line ';' :(l.inhale)
 s.inhale
  endfile(file)
