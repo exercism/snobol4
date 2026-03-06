@@ -1,0 +1,4 @@
+* INPUT.NUMBER = INPUT for local testing
+RAINDROPS 
+        RESULT = INPUT.NUMBER
+END

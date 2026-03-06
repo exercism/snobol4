@@ -1,0 +1,15 @@
+  define('inhale(script)codeblock,unit,line') :(e.inhale)
+inhale codeblock = ''
+ unit = io_findunit()
+ input(.file, unit, , script) :f(f.inhale)
+l.inhale
+ line = file :f(s.inhale)
+ line pos(0) 'END' rpos(0) :s(l.inhale)
+ codeblock = codeblock line ';' :(l.inhale)
+s.inhale
+ endfile(file)
+ detach(.file)
+  inhale = codeblock :(return)
+f.inhale
+ output = script ' not found' :(freturn)
+e.inhale 

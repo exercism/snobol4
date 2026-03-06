@@ -1,0 +1,195 @@
+-include 'bq.sno'
+-include 'lib/inhale.sno'
+-include 'lib/whereami.sno'
+-include 'lib/cmprep.sno'
+-include 'lib/nextword.sno'
+-include 'lib/listtests.sno'
+ pass.count = 0
+ fail.count = 0
+ test.count = 0
+ corecode = inhale('./raindrops.sno') :s(file.exists)
+ output = 'file ./raindrops.sno not found' :(end)
+file.exists
+ codeblock = corecode '; :(test.after)'
+ compiled = code(codeblock)
+ testlist = host(0)
+ testlist pos(0) "-list" rpos(0) :f(test.numbers)
+ listtests()
+ :(end)
+test.numbers
+ ident(testlist) :f(test.loop)
+ testlist = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18'
+test.loop
+ testitem = nextword(testlist)
+ testno = testitem<1>
+ :($('test.' testno))
+test.after
+ output = cmprep(description, result, expected)
+ ident(testitem<2>) :s(tests.done)
+ testlist = testitem<2>
+ :(test.loop)
+test.1
+*#1. the sound for 1 is 1
+ description = 'the sound for 1 is 1'
+ expected = '1'
+ property = 'convert'
+ input.number = 1
+ :<compiled>
+ :(test.after)
+test.1.end
+test.2
+*#2. the sound for 3 is Pling
+ description = 'the sound for 3 is Pling'
+ expected = 'Pling'
+ property = 'convert'
+ input.number = 3
+ :<compiled>
+ :(test.after)
+test.2.end
+test.3
+*#3. the sound for 5 is Plang
+ description = 'the sound for 5 is Plang'
+ expected = 'Plang'
+ property = 'convert'
+ input.number = 5
+ :<compiled>
+ :(test.after)
+test.3.end
+test.4
+*#4. the sound for 7 is Plong
+ description = 'the sound for 7 is Plong'
+ expected = 'Plong'
+ property = 'convert'
+ input.number = 7
+ :<compiled>
+ :(test.after)
+test.4.end
+test.5
+*#5. the sound for 6 is Pling as it has a factor 3
+ description = 'the sound for 6 is Pling as it has a factor 3'
+ expected = 'Pling'
+ property = 'convert'
+ input.number = 6
+ :<compiled>
+ :(test.after)
+test.5.end
+test.6
+*#6. 2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base
+ description = '2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base'
+ expected = '8'
+ property = 'convert'
+ input.number = 8
+ :<compiled>
+ :(test.after)
+test.6.end
+test.7
+*#7. the sound for 9 is Pling as it has a factor 3
+ description = 'the sound for 9 is Pling as it has a factor 3'
+ expected = 'Pling'
+ property = 'convert'
+ input.number = 9
+ :<compiled>
+ :(test.after)
+test.7.end
+test.8
+*#8. the sound for 10 is Plang as it has a factor 5
+ description = 'the sound for 10 is Plang as it has a factor 5'
+ expected = 'Plang'
+ property = 'convert'
+ input.number = 10
+ :<compiled>
+ :(test.after)
+test.8.end
+test.9
+*#9. the sound for 14 is Plong as it has a factor of 7
+ description = 'the sound for 14 is Plong as it has a factor of 7'
+ expected = 'Plong'
+ property = 'convert'
+ input.number = 14
+ :<compiled>
+ :(test.after)
+test.9.end
+test.10
+*#10. the sound for 15 is PlingPlang as it has factors 3 and 5
+ description = 'the sound for 15 is PlingPlang as it has factors 3 and 5'
+ expected = 'PlingPlang'
+ property = 'convert'
+ input.number = 15
+ :<compiled>
+ :(test.after)
+test.10.end
+test.11
+*#11. the sound for 21 is PlingPlong as it has factors 3 and 7
+ description = 'the sound for 21 is PlingPlong as it has factors 3 and 7'
+ expected = 'PlingPlong'
+ property = 'convert'
+ input.number = 21
+ :<compiled>
+ :(test.after)
+test.11.end
+test.12
+*#12. the sound for 25 is Plang as it has a factor 5
+ description = 'the sound for 25 is Plang as it has a factor 5'
+ expected = 'Plang'
+ property = 'convert'
+ input.number = 25
+ :<compiled>
+ :(test.after)
+test.12.end
+test.13
+*#13. the sound for 27 is Pling as it has a factor 3
+ description = 'the sound for 27 is Pling as it has a factor 3'
+ expected = 'Pling'
+ property = 'convert'
+ input.number = 27
+ :<compiled>
+ :(test.after)
+test.13.end
+test.14
+*#14. the sound for 35 is PlangPlong as it has factors 5 and 7
+ description = 'the sound for 35 is PlangPlong as it has factors 5 and 7'
+ expected = 'PlangPlong'
+ property = 'convert'
+ input.number = 35
+ :<compiled>
+ :(test.after)
+test.14.end
+test.15
+*#15. the sound for 49 is Plong as it has a factor 7
+ description = 'the sound for 49 is Plong as it has a factor 7'
+ expected = 'Plong'
+ property = 'convert'
+ input.number = 49
+ :<compiled>
+ :(test.after)
+test.15.end
+test.16
+*#16. the sound for 52 is 52
+ description = 'the sound for 52 is 52'
+ expected = '52'
+ property = 'convert'
+ input.number = 52
+ :<compiled>
+ :(test.after)
+test.16.end
+test.17
+*#17. the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7
+ description = 'the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7'
+ expected = 'PlingPlangPlong'
+ property = 'convert'
+ input.number = 105
+ :<compiled>
+ :(test.after)
+test.17.end
+test.18
+*#18. the sound for 3125 is Plang as it has a factor 5
+ description = 'the sound for 3125 is Plang as it has a factor 5'
+ expected = 'Plang'
+ property = 'convert'
+ input.number = 3125
+ :<compiled>
+ :(test.after)
+test.18.end
+tests.done
+ output = test.count " tests. " pass.count " passes, " fail.count " failures."
+END
