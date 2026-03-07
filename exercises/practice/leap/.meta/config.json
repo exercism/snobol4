@@ -1,0 +1,24 @@
+{
+  "authors": ["axtens"],
+  "files": {
+    "solution": [
+      "leap.sno"
+    ],
+    "test": [
+      "test.sno"
+    ],
+    "example": [
+      ".meta/example.sno"
+    ],
+    "invalidator": [
+      "lib/cmprep.sno",
+      "lib/inhale.sno",
+      "lib/listtests.sno",
+      "lib/nextword.sno",
+      "lib/whereami.sno"
+    ]
+  },
+  "blurb": "Determine whether a given year is a leap year.",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap"
+}
