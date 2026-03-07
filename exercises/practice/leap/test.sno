@@ -1,0 +1,114 @@
+-include 'bq.sno'
+-include 'lib/inhale.sno'
+-include 'lib/whereami.sno'
+-include 'lib/cmprep.sno'
+-include 'lib/nextword.sno'
+-include 'lib/listtests.sno'
+ pass.count = 0
+ fail.count = 0
+ test.count = 0
+ corecode = inhale('./leap.sno') :s(file.exists)
+ output = 'file ./leap.sno not found' :(end)
+file.exists
+ codeblock = corecode '; :(test.after)'
+ compiled = code(codeblock)
+ testlist = host(0)
+ testlist pos(0) "-list" rpos(0) :f(test.numbers)
+ listtests()
+ :(end)
+test.numbers
+ ident(testlist) :f(test.loop)
+ testlist = '1 2 3 4 5 6 7 8 9'
+test.loop
+ testitem = nextword(testlist)
+ testno = testitem<1>
+ :($('test.' testno))
+test.after
+ output = cmprep(description, result, expected)
+ ident(testitem<2>) :s(tests.done)
+ testlist = testitem<2>
+ :(test.loop)
+test.1
+*#1. year not divisible by 4 in common year
+ description = 'year not divisible by 4 in common year'
+ expected = 0
+ property = 'leapYear'
+ input.year = 2015
+ :<compiled>
+ :(test.after)
+test.1.end
+test.2
+*#2. year divisible by 2, not divisible by 4 in common year
+ description = 'year divisible by 2, not divisible by 4 in common year'
+ expected = 0
+ property = 'leapYear'
+ input.year = 1970
+ :<compiled>
+ :(test.after)
+test.2.end
+test.3
+*#3. year divisible by 4, not divisible by 100 in leap year
+ description = 'year divisible by 4, not divisible by 100 in leap year'
+ expected = 1
+ property = 'leapYear'
+ input.year = 1996
+ :<compiled>
+ :(test.after)
+test.3.end
+test.4
+*#4. year divisible by 4 and 5 is still a leap year
+ description = 'year divisible by 4 and 5 is still a leap year'
+ expected = 1
+ property = 'leapYear'
+ input.year = 1960
+ :<compiled>
+ :(test.after)
+test.4.end
+test.5
+*#5. year divisible by 100, not divisible by 400 in common year
+ description = 'year divisible by 100, not divisible by 400 in common year'
+ expected = 0
+ property = 'leapYear'
+ input.year = 2100
+ :<compiled>
+ :(test.after)
+test.5.end
+test.6
+*#6. year divisible by 100 but not by 3 is still not a leap year
+ description = 'year divisible by 100 but not by 3 is still not a leap year'
+ expected = 0
+ property = 'leapYear'
+ input.year = 1900
+ :<compiled>
+ :(test.after)
+test.6.end
+test.7
+*#7. year divisible by 400 is leap year
+ description = 'year divisible by 400 is leap year'
+ expected = 1
+ property = 'leapYear'
+ input.year = 2000
+ :<compiled>
+ :(test.after)
+test.7.end
+test.8
+*#8. year divisible by 400 but not by 125 is still a leap year
+ description = 'year divisible by 400 but not by 125 is still a leap year'
+ expected = 1
+ property = 'leapYear'
+ input.year = 2400
+ :<compiled>
+ :(test.after)
+test.8.end
+test.9
+*#9. year divisible by 200, not divisible by 400 in common year
+ description = 'year divisible by 200, not divisible by 400 in common year'
+ expected = 0
+ property = 'leapYear'
+ input.year = 1800
+ :<compiled>
+ :(test.after)
+test.9.end
+tests.done
+ output = test.count " tests. " pass.count " passes, " fail.count " failures."
+END
