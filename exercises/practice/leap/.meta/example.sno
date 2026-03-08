@@ -1,6 +1,6 @@
-leap	
-	result = 0
-	result = eq(remdr(input.year, 4), 0) 1
-	result = eq(remdr(input.year, 100), 0) 0
-	result = eq(remdr(input.year, 400),0) 1
-end
+LEAP	
+ RESULT = 0
+ RESULT = EQ(REMDR(INPUT.YEAR, 4), 0) 1
+ RESULT = EQ(REMDR(INPUT.YEAR, 100), 0) 0
+ RESULT = EQ(REMDR(INPUT.YEAR, 400),0) 1
+END
