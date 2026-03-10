@@ -129,4 +129,5 @@ test.11
 test.11.end
 tests.done
  output = test.count " tests. " pass.count " passes, " fail.count " failures."
+ &CODE = fail.count
 END
