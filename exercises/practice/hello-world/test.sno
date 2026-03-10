@@ -7,8 +7,8 @@
  pass.count = 0
  fail.count = 0
  test.count = 0
- corecode = inhale('./hello_world.sno') :s(file.exists)
- output = 'file ./hello_world.sno not found' :(end)
+ corecode = inhale('./hello-world.sno') :s(file.exists)
+ output = 'file ./hello-world.sno not found' :(end)
 file.exists
  codeblock = corecode '; :(test.after)'
  compiled = code(codeblock)
@@ -38,4 +38,5 @@ test.1
 test.1.end
 tests.done
  output = test.count " tests. " pass.count " passes, " fail.count " failures."
+ &CODE = fail.count
 END

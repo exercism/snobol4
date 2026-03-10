@@ -19,17 +19,28 @@
 # ./bin/test
 
 # Verify the Concept Exercises
-for concept_exercise_dir in ./exercises/concept/*/; do
-    if [ -d $concept_exercise_dir ]; then
-        echo "Checking $(basename "${concept_exercise_dir}") exercise..."
-        # TODO: run command to verify that the exemplar solution passes the tests
-    fi
-done
+# for concept_exercise_dir in ./exercises/concept/*/; do
+#     if [ -d $concept_exercise_dir ]; then
+#         echo "Checking $(basename "${concept_exercise_dir}") exercise..."
+#         # TODO: run command to verify that the exemplar solution passes the tests
+#     fi
+# done
 
 # Verify the Practice Exercises
-for practice_exercise_dir in ./exercises/practice/*/; do
-    if [ -d $practice_exercise_dir ]; then
-        echo "Checking $(basename "${practice_exercise_dir}") exercise..."
-        # TODO: run command to verify that the example solution passes the tests
+for dir in ./exercises/practice/*/; do
+    if [ -d $dir ]; then
+        slug=$(basename "${dir}")
+        echo $slug
+        cd "${dir}"
+        mv "${slug}.sno" "${slug}.aside"
+        cp ".meta/example.sno" "${slug}.sno" 
+        snobol4 test.sno
+        errcode=$?
+        mv "${slug}.aside" "${slug}.sno"
+        cd - > /dev/null
+        if [ $errcode -ne 0 ]; then
+            echo "Tests failed for ${slug} exercise."
+            exit 1
+        fi
     fi
 done
