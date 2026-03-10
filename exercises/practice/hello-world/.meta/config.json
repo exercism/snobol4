@@ -2,7 +2,7 @@
   "authors": ["axtens"],
   "files": {
     "solution": [
-      "hello_world.sno"
+      "hello-world.sno"
     ],
     "test": [
       "test.sno"

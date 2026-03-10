@@ -17,7 +17,7 @@
   },
   "files": {
     "solution": [
-      "%{kebab-slug}.sno"
+      "%{kebab_slug}.sno"
     ],
     "test": [
       "test.sno"
