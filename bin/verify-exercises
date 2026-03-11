@@ -26,21 +26,30 @@
 #     fi
 # done
 
+tmpdir=$(mktemp -d)
+echo "$tmpdir"
+trap "rm -rf ${tmpdir}" EXIT
+shopt -s nullglob
+failed=()
+
 # Verify the Practice Exercises
 for dir in ./exercises/practice/*/; do
-    if [ -d $dir ]; then
-        slug=$(basename "${dir}")
-        echo $slug
-        cd "${dir}"
-        mv "${slug}.sno" "${slug}.aside"
+    slug=${dir%/}
+    slug=${slug##*/}
+    printf '== Checking practice exercise %s ==\n' "${slug}"
+    (
+        cd "${dir}" || exit
+        mv "${slug}.sno" "${tmpdir}"
+        trap "mv ${tmpdir}/${slug}.sno ${slug}.sno" EXIT
         cp ".meta/example.sno" "${slug}.sno" 
         snobol4 test.sno
-        errcode=$?
-        mv "${slug}.aside" "${slug}.sno"
-        cd - > /dev/null
-        if [ $errcode -ne 0 ]; then
-            echo "Tests failed for ${slug} exercise."
-            exit 1
-        fi
-    fi
+    ) || failed+=("${slug}")
 done
+
+if (( ${#failed[@]} != 0 )); then
+    printf '\nFailed exercises:\n'
+    printf '  %s\n' "${failed[@]}"
+    exit 1
+else
+    printf '\nAll exercises passed!\n'
+fi
