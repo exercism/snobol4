@@ -1,6 +1,4 @@
-* Use INPUT.YEAR = INPUT 
-* and OUTPUT = RESULT when developing your solution, 
-* but comment out these lines when using test.sno
-LEAP
-    RESULT = 0
+ INPUT.YEAR = IDENT(DESCRIPTION) INPUT
+* Output to RESULT
+ RESULT = 0
 END
