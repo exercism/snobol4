@@ -1,0 +1,5 @@
+ input.phrase = ident(description) input
+acronym result = 0
+ output = result
+end
+

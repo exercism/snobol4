@@ -1,0 +1,102 @@
+"use strict";
+mktest();
+function mktest() {
+    var _a;
+    if (__.argc === 0) {
+        print("Usage: mktest <filename> [output-filename]");
+        exit(1);
+    }
+    const parsed = argparse();
+    const filename = parsed.names[0];
+    const output = (_a = parsed.names[1]) !== null && _a !== void 0 ? _a : "test.sno";
+    if (parsed.keys.includes("/debug"))
+        debugger;
+    print(`Using canonical data: ${filename}`);
+    const JObject = JSON.parse(slurp(filename));
+    const exercise = JObject["exercise"];
+    const cases = JObject["cases"];
+    if (JObject.cases.cases) {
+        print("Embedded cases. Skipping...");
+    }
+    const snofile = [];
+    snofile.push('-include \'bq.sno\'');
+    snofile.push('-include \'lib/inhale.sno\'');
+    snofile.push('-include \'lib/whereami.sno\'');
+    snofile.push('-include \'lib/cmprep.sno\'');
+    snofile.push('-include \'lib/nextword.sno\'');
+    snofile.push('-include \'lib/listtests.sno\'');
+    snofile.push(' pass.count = 0');
+    snofile.push(' fail.count = 0');
+    snofile.push(' test.count = 0');
+    snofile.push(` corecode = inhale('./${exercise}.sno') :s(file.exists)`);
+    snofile.push(` output = 'file ./${exercise}.sno not found' :(end)`);
+    snofile.push('file.exists');
+    snofile.push(" codeblock = corecode '; :(test.after)'");
+    snofile.push(" compiled = code(codeblock)");
+    snofile.push(' testlist = host(0)');
+    snofile.push(' testlist pos(0) "-list" rpos(0) :f(test.numbers)');
+    snofile.push(' listtests()');
+    snofile.push(' :(end)');
+    snofile.push('test.numbers');
+    snofile.push(' ident(testlist) :f(test.loop)');
+    snofile.push(` testlist = '${cases.map((_, i) => (i + 1).toString()).join(" ")}'`);
+    snofile.push('test.loop');
+    snofile.push(' testitem = nextword(testlist)');
+    snofile.push(' testno = testitem<1>');
+    snofile.push(" :($('test.' testno))");
+    snofile.push('test.after');
+    snofile.push(` output = cmprep(description, result, expected)`);
+    snofile.push(' ident(testitem<2>) :s(tests.done)');
+    snofile.push(' testlist = testitem<2>');
+    snofile.push(' :(test.loop)');
+    cases.forEach((testcase, i) => {
+        const description = testcase["description"];
+        const uuid = testcase["uuid"];
+        const property = testcase["property"];
+        const inputKeys = Object.keys(testcase["input"]);
+        const expected = testcase["expected"];
+        snofile.push(`test.${i + 1}`);
+        snofile.push(`*#${i + 1}. ${description}`);
+        snofile.push(` description = '${description}'`);
+        snofile.push(` expected = ${render(expected)}`);
+        snofile.push(` property = ${render(property)}`);
+        inputKeys.forEach(key => {
+            snofile.push(` input.${key} = ${render(testcase.input[key])}`);
+        });
+        snofile.push(` :<compiled>`);
+        snofile.push(' :(test.after)');
+        snofile.push(`test.${i + 1}.end`);
+    });
+    snofile.push('tests.done');
+    snofile.push(' output = test.count " tests. " pass.count " passes, " fail.count " failures."');
+    snofile.push(' &CODE = fail.count');
+    snofile.push('END');
+    spit(output, snofile.join("\n"));
+    function render(o) {
+        if ("boolean" === typeof o)
+            return o ? 1 : 0;
+        if ("string" === typeof o) {
+            if (o.includes('"'))
+                return "'" + o.replace(/\n/g, "' char(10) '").replace(/\r/g, "' char(13) '") + "'";
+            if (o.includes("'"))
+                return '"' + o.replace(/\n/g, '" char(10) "').replace(/\r/g, '" char(13) "') + '"';
+            return "'" + o.replace(/\n/g, "' char(10) '").replace(/\r/g, "' char(13) '") + "'";
+        }
+        if (o instanceof Array) {
+            return `'${o.join(";")}'`;
+        }
+        return o;
+    }
+    function argparse() {
+        const keys = [];
+        const names = [];
+        for (let i = 0; i < __.argc; i++) {
+            const kvp = __.args(i);
+            if (kvp.substring(0, 1) === "/")
+                keys.push(kvp);
+            else
+                names.push(kvp);
+        }
+        return { keys, names };
+    }
+}

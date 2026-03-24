@@ -1,0 +1,115 @@
+-include 'bq.sno'
+-include 'lib/inhale.sno'
+-include 'lib/whereami.sno'
+-include 'lib/cmprep.sno'
+-include 'lib/nextword.sno'
+-include 'lib/listtests.sno'
+ pass.count = 0
+ fail.count = 0
+ test.count = 0
+ corecode = inhale('./acronym.sno') :s(file.exists)
+ output = 'file ./acronym.sno not found' :(end)
+file.exists
+ codeblock = corecode '; :(test.after)'
+ compiled = code(codeblock)
+ testlist = host(0)
+ testlist pos(0) "-list" rpos(0) :f(test.numbers)
+ listtests()
+ :(end)
+test.numbers
+ ident(testlist) :f(test.loop)
+ testlist = '1 2 3 4 5 6 7 8 9'
+test.loop
+ testitem = nextword(testlist)
+ testno = testitem<1>
+ :($('test.' testno))
+test.after
+ output = cmprep(description, result, expected)
+ ident(testitem<2>) :s(tests.done)
+ testlist = testitem<2>
+ :(test.loop)
+test.1
+*#1. basic
+ description = 'basic'
+ expected = 'PNG'
+ property = 'abbreviate'
+ input.phrase = 'Portable Network Graphics'
+ :<compiled>
+ :(test.after)
+test.1.end
+test.2
+*#2. lowercase words
+ description = 'lowercase words'
+ expected = 'ROR'
+ property = 'abbreviate'
+ input.phrase = 'Ruby on Rails'
+ :<compiled>
+ :(test.after)
+test.2.end
+test.3
+*#3. punctuation
+ description = 'punctuation'
+ expected = 'FIFO'
+ property = 'abbreviate'
+ input.phrase = 'First In, First Out'
+ :<compiled>
+ :(test.after)
+test.3.end
+test.4
+*#4. all caps word
+ description = 'all caps word'
+ expected = 'GIMP'
+ property = 'abbreviate'
+ input.phrase = 'GNU Image Manipulation Program'
+ :<compiled>
+ :(test.after)
+test.4.end
+test.5
+*#5. punctuation without whitespace
+ description = 'punctuation without whitespace'
+ expected = 'CMOS'
+ property = 'abbreviate'
+ input.phrase = 'Complementary metal-oxide semiconductor'
+ :<compiled>
+ :(test.after)
+test.5.end
+test.6
+*#6. very long abbreviation
+ description = 'very long abbreviation'
+ expected = 'ROTFLSHTMDCOALM'
+ property = 'abbreviate'
+ input.phrase = 'Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'
+ :<compiled>
+ :(test.after)
+test.6.end
+test.7
+*#7. consecutive delimiters
+ description = 'consecutive delimiters'
+ expected = 'SIMUFTA'
+ property = 'abbreviate'
+ input.phrase = 'Something - I made up from thin air'
+ :<compiled>
+ :(test.after)
+test.7.end
+test.8
+*#8. apostrophes
+ description = 'apostrophes'
+ expected = 'HC'
+ property = 'abbreviate'
+ input.phrase = "Halley's Comet"
+ :<compiled>
+ :(test.after)
+test.8.end
+test.9
+*#9. underscore emphasis
+ description = 'underscore emphasis'
+ expected = 'TRNT'
+ property = 'abbreviate'
+ input.phrase = 'The Road _Not_ Taken'
+ :<compiled>
+ :(test.after)
+test.9.end
+tests.done
+ output = test.count " tests. " pass.count " passes, " fail.count " failures."
+ &CODE = fail.count
+END
