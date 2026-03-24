@@ -1,0 +1,21 @@
+ define('cmprep(testname,result,expected)lhs,rhs,bhs') :(e.cmprep)
+cmprep test.count = test.count + 1
+ datatype(result) len(1) . lhs
+ datatype(expected) len(1) . rhs
+ bhs = lhs rhs '.cmprep'
+ :($bhs)
+is.cmprep
+ eq(result, 0 + expected) :s(s.cmprep)f(f.cmprep)
+si.cmprep
+ eq(0 + result, expected) :s(s.cmprep)f(f.cmprep)
+ii.cmprep
+ eq(result, expected) :s(s.cmprep)f(f.cmprep)
+ss.cmprep
+ cmprep = ident(result, expected) :s(s.cmprep)f(f.cmprep)
+s.cmprep
+ pass.count = pass.count + 1
+ cmprep = testname ' ... OK' :(return)
+f.cmprep
+ fail.count = fail.count + 1
+ cmprep = testname ' ... FAIL' :(return)
+e.cmprep

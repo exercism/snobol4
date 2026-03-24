@@ -1,0 +1,9 @@
+ input.phrase = ident(description) input
+acronym input.phrase = replace(input.phrase, &lcase, &ucase)
+clean input.phrase notany(' -' &ucase) = :s(clean)
+ result = ""
+loop input.phrase (span(&ucase) . word) = "" :f(done)
+ result = result substr(word, 1, 1) :(loop)
+done 
+end
+

@@ -1,0 +1,24 @@
+{
+  "authors": ["axtens"],
+  "files": {
+    "solution": [
+      "acronym.sno"
+    ],
+    "test": [
+      "test.sno"
+    ],
+    "example": [
+      ".meta/example.sno"
+    ],
+    "invalidator": [
+      "lib/cmprep.sno",
+      "lib/inhale.sno",
+      "lib/listtests.sno",
+      "lib/nextword.sno",
+      "lib/whereami.sno"
+    ]
+  },
+  "blurb": "Convert a long phrase to its acronym.",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc"
+}
