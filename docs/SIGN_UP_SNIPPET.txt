@@ -1,0 +1,14 @@
+        DEFINE('MOSTCOMMONWORD(TEXT)COUNTS,WORD,BEST,MAX')  :(MCW.END)
+MOSTCOMMONWORD
+        COUNTS = TABLE()
+        MAX = 0
+        TEXT = REPLACE(TEXT, &UCASE, &LCASE) ' '
+MCW.LOOP
+        TEXT BREAK(' ') . WORD SPAN(' ') =      :F(MCW.DONE)
+        COUNTS<WORD> = COUNTS<WORD> + 1
+        GT(COUNTS<WORD>, MAX)                   :F(MCW.LOOP)
+        BEST = WORD
+        MAX = COUNTS<WORD>                      :(MCW.LOOP)
+MCW.DONE
+        MOSTCOMMONWORD = '"' BEST '" appears ' MAX ' times'  :(RETURN)
+MCW.END
